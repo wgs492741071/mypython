@@ -1,0 +1,62 @@
+发送请求——获得页面——解析页面——下载内容——储存内容
+
+一、爬虫的干货 
+0. 爬虫的基本思路  
+a. 通过URL或者文件获取网页， 
+b. 分析要爬取的目标内容所在的位置 
+c. 用元素选择器快速提取(Raw) 目标内容 
+d. 处理提取出来的目标内容 （ 通常整理合成一个 Json）  
+e. 存储处理好的目标内容 （比如放到 MongoDB 之类的数据库，或者写进文件里。）
+
+urlopen是urlopen里的一个方法函数通过网址URL来获取数据
+
+关于Python的urlopen的使用：
+　　创建一个表示远程url的类文件对象，然后像本地文件一样操作这个类文件对象来获取远程数据。
+　　参数url表示远程数据的路径，一般是网址；参数data表示以post方式提交到url的数据(玩过web的人应该知道提交数据的两种方式：post与get。如果你不清楚，也不必太在意，一般情况下很少用到这个参数)；参数proxies用于设置代理。
+　　urlopen返回 一个类文件对象，它提供了如下方法：read() , readline() , readlines() , fileno() , close() ：这些方法的使用方式与文件对象完全一样。
+　　info()：返回一个httplib.HTTPMessage 对象，表示远程服务器返回的头信息。getcode()：返回Http状态码。如果是http请求，200表示请求成功完成;404表示网址未找到。geturl()：返回请求的url。
+
+　　一、打开一个网页获取所有的内容
+
+　　from urllib import urlopen
+　　doc = urlopen("http://www.baidu.com").read()
+　　print doc
+
+　　二、获取Http头
+
+　　from urllib import urlopen
+　　doc = urlopen("http://www.baidu.com")
+　　print doc.info()
+　　print doc.info().getheader('Content-Type')
+
+　　#实现图片下载
+
+　　import urllib
+　　url = r"http://www.iteye.com/images/logo.gif"
+　　path = r"h:\downloads\1.jpg"
+　　data = urllib.urlopen(url).read()
+　　f = file(path,"wb")
+　　f.write(data)
+　　f.close() 
+
+
+
+
+urlopen错误SSL:证书验证失败(SSL.c:719)解决办法
+@1
+import ssl
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+   
+    pass
+else:
+  
+    ssl._create_default_https_context = _create_unverified_https_context 
+
+
+
+
+@2
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
